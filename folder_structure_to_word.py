@@ -63,10 +63,15 @@ def create_doc(folder_structure, doc_path):
     """
     doc = Document()
     doc.add_heading('Network Folder Structure', level=1)
-    
+
     root_folder = list(folder_structure.keys())[0]
     add_items_to_doc(doc, folder_structure, root_folder)
 
+    # Ensure the directory for the output document exists to prevent
+    # ``FileNotFoundError`` when saving to a non-existent folder.
+    output_dir = os.path.dirname(doc_path)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
     doc.save(doc_path)
 
 def main(folder_path, output_doc_path):
